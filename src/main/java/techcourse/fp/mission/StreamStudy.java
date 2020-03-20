@@ -4,9 +4,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StreamStudy {
     public static long countWords() throws IOException {
@@ -41,7 +44,10 @@ public class StreamStudy {
     }
 
     public static long sumOverThreeAndDouble(List<Integer> numbers) {
-        return numbers.stream().filter(v -> v > 3).mapToInt(v -> v * 2).sum();
+        return numbers.stream().
+                filter(v -> v > 3)
+                .mapToInt(v -> v * 2)
+                .sum();
     }
 
     public static void printLongestWordTop100() throws IOException {
@@ -49,8 +55,14 @@ public class StreamStudy {
                 .get("src/main/resources/fp/war-and-peace.txt")), StandardCharsets.UTF_8);
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        System.out.println(words);
-        System.out.println(words.size());
+        // System.out.println(words);
+        // System.out.println(words.size());
         // TODO 이 부분에 구현한다.
+        words.stream()
+                .filter(word -> word.length() > 12)
+                .limit(100)
+                .sorted(Comparator.comparing(String::length).reversed())
+                .distinct()
+                .forEach(word -> System.out.println(word.toLowerCase() + " "));
     }
 }
